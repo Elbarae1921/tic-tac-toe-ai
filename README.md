@@ -1,7 +1,6 @@
 # tic-tac-toe
 
-Exactly what the title say, a tic-tac-toe browser game.
-Might implement Ai or Multiplayer functionality later.
+A tic-tac-toe browser game against an AI implemented using the minimax algorithm.
 
 
 ## run
