@@ -54,11 +54,14 @@ const bestMove = () => {
             // check if the cell is unchecked
             
             if(!cells[i][j].checked) {
-                cells[i][j].checked = true;
-                cells[i][j].player = 2;
-                let score = minimax(cells, 0, false, i+j);
-                cells[i][j].checked = false;
-                cells[i][j].player = undefined;
+                let tempCells = cells;
+                tempCells[i][j].checked = true;
+                tempCells[i][j].player = 2;
+
+                let score = minimax(tempCells, 0, false, i+j);
+
+                tempCells = null;
+                
                 if(score > bestScore) {
                     bestScore = score;
                     move = {i, j};
