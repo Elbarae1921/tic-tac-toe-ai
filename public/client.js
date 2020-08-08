@@ -49,19 +49,23 @@ const bestMove = () => {
     
     let move;
     
+    // loop through each cell
     for(let i = 0; i < cells.length; i++) {
         for(let j = 0; j < cells[0].length; j++) {
-            // check if the cell is unchecked
-            
+
+            // check if the cell is unchecked            
             if(!cells[i][j].checked) {
+                // if it isn't check it as the CPU player and see if the move is optimal
                 let tempCells = cells;
                 tempCells[i][j].checked = true;
                 tempCells[i][j].player = 2;
 
+                // check if the move is optimal using a minimax function
                 let score = minimax(tempCells, 0, false, i+j);
 
                 tempCells = null;
                 
+                // if the move was better than the previous one
                 if(score > bestScore) {
                     bestScore = score;
                     move = {i, j};
@@ -77,22 +81,28 @@ const bestMove = () => {
 // minimax
 const minimax = (board, depth, isMax, pos) => {
     
+    // check if the move is final, and is a win for the CPU
     if(checkForWin(board, pos, 2)) {
         return 1;
-    }
+    } // check if it's a win for the player
     else if(checkForWin(board, pos, 1)) {
         return -1;
-    }
+    } // check if it's a tie
     else if(board.flat().every(x => x.checked)) {
         return 0;
-    }
+    } // check if it's the CPU(maximizing player)'s turn
     if(isMax) {
+        // set best value to the lowest possible number
         let bestVal = -Infinity;
+        // loop through each cell
         for(let i = 0; i < board.length; i++) {
             for(let j = 0; j < board[0].length; j++) {
+                // check if it's checked
                 if(!board[i][j].checked) {
+                    // if not check it as the CPU (maximizin player)
                     board[i][j].checked = true;
                     cells[i][j].player = 2;
+                    // call the minimax function inside itself the continue looping through moves, until a best move is found
                     let value = minimax(board, depth+1, false, i+j);
                     board[i][j].checked = false;
                     cells[i][j].player = undefined;
@@ -101,8 +111,9 @@ const minimax = (board, depth, isMax, pos) => {
             }
         }
         return bestVal;
-    }
+    } //check if it's the human player(minimizing player)'s turn
     else {
+        // same process as the maximizing player, just reversed
         let bestVal = Infinity;
         for(let i = 0; i < board.length; i++) {
             for(let j = 0; j < board[0].length; j++) {
@@ -274,7 +285,7 @@ for(let x of cells) {
 
     // loop through the inner arrays
     for(let cell of x) {
-        // assigning events to each <td>
+        // assigning events to each <td> to enable the player to play
         cell.element.addEventListener("click", () => {
             if(cell.checked) return;
 
