@@ -14,7 +14,7 @@ const CPUchoice = ["X", "O"].filter(x => x!==choice)[0];
 
 
 // get the cells from the document and map them
-let tds = Array.from(document.querySelectorAll('td'), td => {
+let tds = Array.from(document.querySelectorAll('td')).map(td => {
     return {
         id: td.id,
         element: td,
@@ -56,7 +56,7 @@ const bestMove = () => {
             // check if the cell is unchecked            
             if(!cells[i][j].checked) {
                 // if it isn't check it as the CPU player and see if the move is optimal
-                let tempCells = cells;
+                let tempCells = JSON.parse(JSON.stringify(cells)); // clone the object without reference
                 tempCells[i][j].checked = true;
                 tempCells[i][j].player = 2;
 
@@ -80,7 +80,7 @@ const bestMove = () => {
 
 // minimax
 const minimax = (board, depth, isMax, pos) => {
-    
+
     // check if the move is final, and is a win for the CPU
     if(checkForWin(board, pos, 2)) {
         return 1;
@@ -101,11 +101,11 @@ const minimax = (board, depth, isMax, pos) => {
                 if(!board[i][j].checked) {
                     // if not check it as the CPU (maximizin player)
                     board[i][j].checked = true;
-                    cells[i][j].player = 2;
+                    board[i][j].player = 2;
                     // call the minimax function inside itself the continue looping through moves, until a best move is found
                     let value = minimax(board, depth+1, false, i+j);
                     board[i][j].checked = false;
-                    cells[i][j].player = undefined;
+                    board[i][j].player = undefined;
                     bestVal = Math.max(bestVal, value);
                 }
             }
@@ -119,10 +119,10 @@ const minimax = (board, depth, isMax, pos) => {
             for(let j = 0; j < board[0].length; j++) {
                 if(!board[i][j].checked) {
                     board[i][j].checked = true;
-                    cells[i][j].player = 1;
+                    board[i][j].player = 1;
                     let value = minimax(board, depth+1, true, i+j);
                     board[i][j].checked = false;
-                    cells[i][j].player = undefined;
+                    board[i][j].player = undefined;
                     bestVal = Math.min(bestVal, value);
                 }
             }
